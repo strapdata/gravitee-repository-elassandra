@@ -27,7 +27,7 @@ $ mvn clean package
 
 Unzip the gravitee-repository-elassandra-1.0.0-SNAPSHOT.zip in the gravitee home directory.
 
-Move the *gravitee-repository-elassandra-1.0.0-SNAPSHOT.zip* in the **Gravitee** */plugins* directory.
+Copy the *gravitee-repository-elassandra-1.0.0-SNAPSHOT.zip* in the **Gravitee** */plugins* directory.
 
 
 ## Configuration
