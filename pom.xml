@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+    Copyright (C) ${project.inceptionYear} Strapdata (https://www.strapdata.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -312,8 +312,8 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
                     <properties>
-                        <owner>The Gravitee team</owner>
-                        <email>http://gravitee.io</email>
+                        <owner>Strapdata</owner>
+                        <email>https://www.strapdata.com</email>
                     </properties>
                     <excludes>
                         <exclude>LICENSE.txt</exclude>

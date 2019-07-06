@@ -1,0 +1,24 @@
+language: java
+sudo: false # faster builds
+
+script:
+  - mvn clean test
+  - mvn clean package
+
+before_deploy:
+  - export JARBALL=$(ls target/gravitee-repository-elassandra-*.jar)
+  - export ZIPBALL=$(ls target/gravitee-repository-elassandra-*.zip)
+
+deploy:
+  - provider: releases
+    overwrite: true
+    draft: false
+    api_key:
+      secure: "MFhecFMYXJRTZYYTY0zrvQyDoTUXtaODNuF/Im7pFZDbC7aWgo5s8HFmyzNpJADKwydO1RLFPpEhJGTJ/FbuTDvshc/PirzVbrVr4jK0hnNCFaYEBqOypJzoR1j5bdivmMWxaHVvKEfAr+iNs9fwEVeb3uS+JrsZspImBkDbbeuOq0SKyxl1CrE1KF3aZJWOv50zKJaGyre9dKUq9JL8Js2dNKpebYhP8tjhD7iShD344I00br9qu3ThZ3rG6LTv4c3llI0ZRhWb644iNFtz9CoKQXK30ATjh1avT1wZr6Ci+62kYAePBToagbHd5xs8S78hFkUcm7Z0/8XX8m5KJNyJl+MSh0F/vkEpBJaLSqwUPcgbEB5wqYvWDTWADY9rQ80Mv6I97kmxpYPGpRLONBxjDby2fUVGnyr+7tWhAmAXOomtMXMl6LOLHCp0gNFMO2Twp77vTRz8e38B2dJ5vg155bGNHM7kBwP3EuiKiKFwA+RUpukVLQon7foGvikEsB1HLrNoOg44QEzrcEL6UP9tHyEFWWfwSnD3q7ybQ7bjzFC4N9F1t/NpYI2icR8X/3dRrj4GjWMCMWK75HZWjycrfd0nNLdhKyGAw2rlTmgq6Sypm3g80aq3LvGJ+Pnb7s6B2IAzNgOyhT8TKlIILZ3wQlYMrVBaVaMTmRItHWY="
+    file:
+      - "$JARBALL"
+      - "$ZIPBALL"
+    skip_cleanup: true
+    on:
+      tags: true
+      repo: strapdata/gravitee-repository-elassandra
