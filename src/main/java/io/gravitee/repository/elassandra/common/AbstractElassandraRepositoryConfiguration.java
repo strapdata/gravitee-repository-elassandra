@@ -90,18 +90,18 @@ public abstract class AbstractElassandraRepositoryConfiguration {
     public Cluster cluster() {
         LOGGER.debug("Building Cassandra Cluster object");
         return Cluster.builder()
-                .addContactPoints(environment.getProperty(scope + ".cassandra.contactPoint", "localhost"))
-                .withPort(environment.getProperty(scope + ".cassandra.port", Integer.class, 9042))
-                .withClusterName(environment.getProperty(scope + ".cassandra.clusterName", "elassandra"))
+                .addContactPoints(environment.getProperty(scope + ".elassandra.contactPoint", "localhost"))
+                .withPort(environment.getProperty(scope + ".elassandra.port", Integer.class, 9042))
+                .withClusterName(environment.getProperty(scope + ".elassandra.clusterName", "elassandra"))
                 .withCredentials(
-                        environment.getProperty(scope + ".cassandra.username", "cassandra"),
-                        environment.getProperty(scope + ".cassandra.password", "cassandra"))
+                        environment.getProperty(scope + ".elassandra.username", "cassandra"),
+                        environment.getProperty(scope + ".elassandra.password", "cassandra"))
                 .withSSL(ssl().getSslOption())
                 .withSocketOptions(new SocketOptions()
-                        .setConnectTimeoutMillis(environment.getProperty(scope + ".cassandra.connectTimeoutMillis", Integer.class, SocketOptions.DEFAULT_CONNECT_TIMEOUT_MILLIS))
-                        .setReadTimeoutMillis(environment.getProperty(scope + ".cassandra.readTimeoutMillis", Integer.class, SocketOptions.DEFAULT_READ_TIMEOUT_MILLIS)))
+                        .setConnectTimeoutMillis(environment.getProperty(scope + ".elassandra.connectTimeoutMillis", Integer.class, SocketOptions.DEFAULT_CONNECT_TIMEOUT_MILLIS))
+                        .setReadTimeoutMillis(environment.getProperty(scope + ".elassandra.readTimeoutMillis", Integer.class, SocketOptions.DEFAULT_READ_TIMEOUT_MILLIS)))
                 .withQueryOptions(new QueryOptions()
-                        .setConsistencyLevel(ConsistencyLevel.valueOf(environment.getProperty(scope + ".cassandra.consistencyLevel", QueryOptions.DEFAULT_CONSISTENCY_LEVEL.name()))))
+                        .setConsistencyLevel(ConsistencyLevel.valueOf(environment.getProperty(scope + ".elassandra.consistencyLevel", QueryOptions.DEFAULT_CONSISTENCY_LEVEL.name()))))
                 .build();
     }
 
@@ -129,10 +129,10 @@ public abstract class AbstractElassandraRepositoryConfiguration {
     @Bean
     public Config config() {
         Config config = new Config();
-        config.contactPoint = environment.getProperty(scope + ".cassandra.contactPoint", "localhost");
-        config.endpoint = environment.getProperty(scope + ".cassandra.endpoint", "http://localhost:9200");
-        config.username = environment.getProperty(scope + ".cassandra.username", "cassandra");
-        config.password = environment.getProperty(scope + ".cassandra.password", "cassandra");
+        config.contactPoint = environment.getProperty(scope + ".elassandra.contactPoint", "localhost");
+        config.endpoint = environment.getProperty(scope + ".elassandra.endpoint", "http://localhost:9200");
+        config.username = environment.getProperty(scope + ".elassandra.username", "cassandra");
+        config.password = environment.getProperty(scope + ".elassandra.password", "cassandra");
         return config;
     }
 
@@ -152,11 +152,11 @@ public abstract class AbstractElassandraRepositoryConfiguration {
     public Ssl ssl() {
         Ssl ssl = new Ssl();
 
-        String sslProviderName = environment.getProperty(scope + ".cassandra.ssl.provider", SslProvider.JDK.toString());
-        String trustStorePath = environment.getProperty(scope + ".cassandra.ssl.truststore.path");
-        String trustStorePass = environment.getProperty(scope + ".cassandra.ssl.truststore.password");
-        String keyStorePath = environment.getProperty(scope + ".cassandra.ssl.keystore.path");
-        String keyStorePass = environment.getProperty(scope + ".cassandra.ssl.keystore.password");
+        String sslProviderName = environment.getProperty(scope + ".elassandra.ssl.provider", SslProvider.JDK.toString());
+        String trustStorePath = environment.getProperty(scope + ".elassandra.ssl.truststore.path");
+        String trustStorePass = environment.getProperty(scope + ".elassandra.ssl.truststore.password");
+        String keyStorePath = environment.getProperty(scope + ".elassandra.ssl.keystore.path");
+        String keyStorePass = environment.getProperty(scope + ".elassandra.ssl.keystore.password");
 
         LOGGER.info("Init security context, provider={} trustStorePath={} trustStorePass={}", sslProviderName, trustStorePath, trustStorePass);
         if (trustStorePath != null && trustStorePath.length() > 0) {
@@ -234,7 +234,7 @@ public abstract class AbstractElassandraRepositoryConfiguration {
      */
     @Bean(destroyMethod = "close")
     public Session session() {
-        String ks = environment.getProperty(scope + ".cassandra.keyspaceName", scope + "gravitee");
+        String ks = environment.getProperty(scope + ".elassandra.keyspaceName", scope + "gravitee");
         LOGGER.debug("Creating Cassandra Session for the cluster=" + cluster().getClusterName()+ " keyspace="+ks);
         Session session = cluster().connect();
         String dc = session.getState().getConnectedHosts().iterator().next().getDatacenter();

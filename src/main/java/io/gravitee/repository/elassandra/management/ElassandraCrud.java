@@ -51,12 +51,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import com.datastax.driver.core.Host;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-import io.gravitee.repository.Scope;
 import io.gravitee.repository.elassandra.common.AbstractElassandraRepositoryConfiguration;
 import io.gravitee.repository.exceptions.TechnicalException;
 
