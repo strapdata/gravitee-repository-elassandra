@@ -18,7 +18,6 @@ package io.gravitee.repository.elassandra.ratelimit;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.gte;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Iterator;
 

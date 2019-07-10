@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @ComponentScan
-@Profile("!test")
+@Profile("test")
 public class RateLimitRepositoryConfiguration extends AbstractElassandraRepositoryConfiguration {
     @Override
     protected Scope getScope() {
