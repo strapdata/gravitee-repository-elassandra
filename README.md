@@ -7,7 +7,7 @@
 * Scalability by adding Elassandra nodes (without re-indexing) and datacenters (for geo localisation concerns or workload separation)
 * Reduce the global complexity and TCO by using the same NoSQL database for both gravitee configuration, reporting and potentially APIs data storage.
 
-This repository uses Datastax Java driver for synchronous communication with Cassandra and Elasticsearch query over CQL.
+This repository uses Datastax Java driver for communication with Cassandra and Elasticsearch query over CQL.
 
 ## Requirement
 
@@ -50,20 +50,20 @@ Copy the *gravitee-repository-elassandra-1.0.0-SNAPSHOT.zip* in the **Gravitee**
 
 ## Configuration
 
-Configuration settings, prefixed by **<scope>.elassandra**, where scope is **management** or **ratelimit**:
+Configuration settings, prefixed by *scope*.**elassandra**, where *scope* is **management** or **ratelimit**:
 
 
 | Parameter                           |   Description   |        default |
 | ----------------------------------- | --------------- | -------------: |
-| contactPoint                        | allows to connect to Cassandra cluster nodes. It is not necessary to add all contact points because Cassandra driver will use auto-discovery mechanism. |       localhost |
-| endpoint                            | define the Elasticsearch endpoint used to create Elasticsearch indices. | http://localhost:9200 |
-| port                                | defines the CQL native transport port |            9042 |
-| keyspaceName                        | name of the keyspace. Note that the final will be prefixed with the corresponding scope. | <scope>gravitee |
-| username                            | permit to connect to Cassandra and Elasticsearch if using access with credentials. |        cassandra |
-| password                            | permit to connect to Cassandra and Elasticsearch if using access with credentials. |        cassandra |
-| connectTimeoutMillis                | defines how long the driver waits to establish a new connection to a Cassandra node before giving up |            5000 |
-| readTimeoutMillis                   | controls how long the driver waits for a response from a given Cassandra node before considering it unresponsive |           12000 |
-| consistencyLevel                    | sets the level of consistency for read & write access, e.g. ONE, QUORUM, ALL (see Datastax documentation for comprehensive list) |             ONE |
+| contactPoint                        | Allows to connect to Cassandra cluster nodes. It is not necessary to add all contact points because Cassandra driver will use auto-discovery mechanism. |       localhost |
+| endpoint                            | Defines the Elasticsearch endpoint used to create Elasticsearch indices. | http://localhost:9200 |
+| port                                | Defines the CQL native transport port |            9042 |
+| keyspaceName                        | Name of the keyspace. Note that the final will be prefixed with the corresponding scope. | <scope>gravitee |
+| username                            | Permit to connect to Cassandra and Elasticsearch if using access with credentials. |        cassandra |
+| password                            | Permit to connect to Cassandra and Elasticsearch if using access with credentials. |        cassandra |
+| connectTimeoutMillis                | Defines how long the driver waits to establish a new connection to a Cassandra node before giving up |            5000 |
+| readTimeoutMillis                   | Controls how long the driver waits for a response from a given Cassandra node before considering it unresponsive |           12000 |
+| consistencyLevel                    | Sets the level of consistency for read & write access, e.g. ONE, QUORUM, ALL (see Datastax documentation for comprehensive list) |             ONE |
 | ssl.provider                        | Java SSL/TLS provider | JDK |
 | ssl.truststore.path                 | Truststore file name (JKS or P12) |   |
 | ssl.truststore.password             | Truststore password |   |
