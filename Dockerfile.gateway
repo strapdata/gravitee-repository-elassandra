@@ -24,8 +24,8 @@ RUN chown -R maven:maven $MAVEN_HOME
 # build gravitee-repository-elassandra
 COPY --chown=maven:maven . $MAVEN_HOME/build
 WORKDIR $MAVEN_HOME/build
-RUN mvn package
+RUN mvn package -DskipTests
 
 FROM graviteeio/gateway:$GRAVITEE_TAG
 MAINTAINER Strapdata Team <http://www.strapdata.com>
-COPY --from=builder /home/maven/build/target/gravitee-repository-elassandra-*.jar $GRAVITEEIO_HOME/lib/
+COPY --from=builder /home/maven/build/target/gravitee-repository-elassandra-*.zip $GRAVITEEIO_HOME/plugins/

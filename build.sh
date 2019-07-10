@@ -22,14 +22,17 @@ set -ex
 
 GRAVITEE_VERSION=${GRAVITEE_VERSION:-"1.27.1"}
 
-DOCKER_BUILD_OPTS=${DOCKER_BUILD_OPTS:-"--rm"}
+DOCKER_BUILD_OPTS=${DOCKER_BUILD_OPTS:-"--no-cache --rm"}
 
 # If set, the images will be published to docker hub
 DOCKER_PUBLISH=${DOCKER_PUBLISH:-false}
 
 # If set, the images will be tagged latest  
-DOCKER_LATEST=${DOCKER_LATEST:-false}
+DOCKER_LATEST=${DOCKER_LATEST:-true}
 
+# If set, the image is considered to be the latest relative to the major version.
+# Consequently, the image will be tagged with generic versions (for instance 6.2.3.4 will produce 6, 6.2 and 6.2.3)
+DOCKER_MAJOR_LATEST=${DOCKER_MAJOR_LATEST:-true}
 
 push() {
   if [ "$DOCKER_PUBLISH" = true ]; then
@@ -58,9 +61,9 @@ publish() {
   fi
 
   if [ "$DOCKER_MAJOR_LATEST" = "true" ]; then
-    tag_and_push "${image}" "${GRAVITEE_VERSION%.*.*.*}" # one digit version
+#    tag_and_push "${image}" "${GRAVITEE_VERSION%.*.*.*}" # three digit version
     tag_and_push "${image}" "${GRAVITEE_VERSION%.*.*}" # two digit version
-    tag_and_push "${image}" "${GRAVITEE_VERSION%.*}" # three digit version
+    tag_and_push "${image}" "${GRAVITEE_VERSION%.*}" # one digit version
   fi
 }
 
