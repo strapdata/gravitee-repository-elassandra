@@ -28,6 +28,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -55,6 +57,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
 import io.gravitee.repository.Scope;
+import io.gravitee.repository.elassandra.common.AbstractElassandraRepositoryConfiguration;
 import io.gravitee.repository.exceptions.TechnicalException;
 
 public abstract class ElassandraCrud<T, K> {
@@ -66,6 +69,12 @@ public abstract class ElassandraCrud<T, K> {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    protected AbstractElassandraRepositoryConfiguration.Ssl ssl;
+
+    @Autowired
+    protected AbstractElassandraRepositoryConfiguration.Config config;
 
     /**
      * Cassandra table name
@@ -239,41 +248,39 @@ public abstract class ElassandraCrud<T, K> {
     }
 
     public void initMapping() throws IOException, KeyStoreException, NoSuchAlgorithmException {
-        String indexPrefix = environment.getProperty(Scope.MANAGEMENT + ".elasticsearch.prefix");
-        String scheme = environment.getProperty(Scope.MANAGEMENT + ".elasticsearch.scheme", "http");
-        String port = environment.getProperty(Scope.MANAGEMENT + ".elasticsearch.port", "9200");
-        String username = environment.getProperty(Scope.MANAGEMENT + ".cassandra.username");
-        String password = environment.getProperty(Scope.MANAGEMENT + ".cassandra.password");
-
-        Host host = session.getCluster().getMetadata().getAllHosts().iterator().next();
-        LOGGER.info("Init Elasticsearch {}://{}:{}", scheme, host, port);
+        LOGGER.info("Init Elasticsearch endpoint={} username={} password={}", config.getEndpoint(), config.getUsername(), config.getPassword());
 
         try(RestHighLevelClient client = new RestHighLevelClient(
-            RestClient.builder(new HttpHost(host.getAddress(), Integer.parseInt(port), scheme))
+            RestClient.builder(HttpHost.create(config.getEndpoint()))
                 .setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
                     @Override
                     public HttpAsyncClientBuilder customizeHttpClient(
                         HttpAsyncClientBuilder httpClientBuilder) {
-                        if (username != null && password != null) {
+                        if (config.getUsername() != null && config.getPassword() != null) {
                             final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-                            credentialsProvider.setCredentials(AuthScope.ANY,
-                                new UsernamePasswordCredentials(username, password));
+                            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(config.getUsername(), config.getPassword()));
                             httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
                         }
-                        /*
-                        if (elassandraSecurity.getSSLContextOption().isPresent()) {
-                            httpClientBuilder.setSSLContext(elassandraSecurity.getSSLContextOption().get());
+
+                        if (ssl.getSslContext() != null) {
+                            LOGGER.debug("SSL context added");
+                            httpClientBuilder.setSSLContext(ssl.getSslContext());
                             // TODO: fix this workaround
-                            httpClientBuilder.setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE);
+                            httpClientBuilder.setSSLHostnameVerifier(new HostnameVerifier() {
+                                @Override
+                                public boolean verify(String arg0, SSLSession arg1) {
+                                    // TODO Auto-generated method stub
+                                    return true;
+                                }
+                            });
                         }
-                        */
                         return httpClientBuilder;
                     }
                 }))
         ) {
             for(String index : new String [] { indexName } ) {
                 try {
-                    String effectiveIndexName = (indexPrefix == null ? "" : indexPrefix) +index;
+                    String effectiveIndexName = index;
                     LOGGER.info("Creating index={} type={} mapping={}", effectiveIndexName, tableName, mapping.string());
                     CreateIndexRequest request = new CreateIndexRequest(effectiveIndexName);
                     request.mapping(tableName, mapping);
