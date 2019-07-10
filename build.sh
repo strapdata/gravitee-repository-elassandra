@@ -24,6 +24,9 @@ GRAVITEE_VERSION=${GRAVITEE_VERSION:-"1.27.1"}
 
 DOCKER_BUILD_OPTS=${DOCKER_BUILD_OPTS:-"--no-cache --rm"}
 
+# set the target docker registry and repository
+DOCKER_REPO="strapdata"
+
 # If set, the images will be published to docker hub
 DOCKER_PUBLISH=${DOCKER_PUBLISH:-false}
 
@@ -69,7 +72,7 @@ publish() {
 
 for component in gateway management-api
 do
-    image="strapdata/graviteeio-${component}"
+    image="${DOCKER_REPO}/graviteeio-${component}"
     docker build ${DOCKER_BUILD_OPTS} --build-arg GRAVITEE_TAG=${GRAVITEE_VERSION} -f Dockerfile.$component -t "${image}:$GRAVITEE_VERSION" .
     publish "${image}"
 done
