@@ -46,6 +46,12 @@
         <developerConnection>scm:git:git@github.com:strapdata/gravitee-repository-elassandra.git</developerConnection>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>strapdata-maven-releases-public</id>
+            <url>https://nexus.repo.strapdata.com/repository/maven-releases-public</url>
+        </repository>
+    </repositories>
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
@@ -81,9 +87,9 @@
         <gravitee-repository-elastic.version>1.30.1</gravitee-repository-elastic.version>
         <gravitee-repository-test.version>1.30.2</gravitee-repository-test.version>
         <cassandra-driver.version>3.7.1</cassandra-driver.version>
-        <elassandra-unit.version>3.7.1.3-SNAPSHOT</elassandra-unit.version>
+        <elassandra-unit.version>3.7.1.4</elassandra-unit.version>
         <elasticsearch.version>6.8.4</elasticsearch.version>
-        <elassandra.version>6.8.4.3</elassandra.version>
+        <elassandra.version>6.8.4.4</elassandra.version>
         <freemarker.version>2.3.26-incubating</freemarker.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
         <guava-version>19.0</guava-version>
@@ -186,12 +192,6 @@
             <artifactId>spring-data-cassandra</artifactId>
             <version>2.1.9.RELEASE</version>
         </dependency>
-		<dependency>
-            <groupId>com.strapdata.strapkop</groupId>
-            <artifactId>driver-addons</artifactId>
-            <version>6.8.4.3</version>
-        </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
