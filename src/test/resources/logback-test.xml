@@ -1,0 +1,17 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %C.%M:%L %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.gravitee" level="warn" />
+    <logger name="io.gravitee.repository.elassandra" level="INFO" />
+    <logger name="org.cassandraunit" level="warn" />
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

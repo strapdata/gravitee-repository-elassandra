@@ -1,0 +1,31 @@
+language: java
+sudo: false # faster builds
+services:
+  - docker
+script:
+  - mvn clean test
+  - mvn clean package
+before_deploy:
+  - export JARBALL=$(ls target/gravitee-repository-elassandra-*.jar)
+  - export ZIPBALL=$(ls target/gravitee-repository-elassandra-*.zip)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    overwrite: true
+    draft: false
+    api_key:
+      secure: $GITHUB_OAUTH_TOKEN
+    file:
+      - "$JARBALL"
+      - "$ZIPBALL"
+    on:
+      tags: true
+      repo: strapdata/gravitee-repository-elassandra
+  - provider: script
+    skip_cleanup: true
+    script: DOCKER_PUBLISH="true" ./build.sh
+    draft: false
+    on:
+      tags: true
+      repo: strapdata/gravitee-repository-elassandra
