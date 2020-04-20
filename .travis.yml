@@ -14,8 +14,7 @@ deploy:
     skip_cleanup: true
     overwrite: true
     draft: false
-    api_key:
-      secure: $GITHUB_OAUTH_TOKEN
+    api_key: $GITHUB_OAUTH_TOKEN
     file:
       - "$JARBALL"
       - "$ZIPBALL"
